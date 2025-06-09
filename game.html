@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legenda Daulat - Pengembaraan RPG</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: none;
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+        .min-h-\[150px\] {
+            min-height: 150px;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 p-4">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-6">
+            <h1 class="text-4xl font-bold text-amber-800 mb-2 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 mr-3 text-yellow-600">
+                    <path d="m14 6 4-4 6 6-4 4"></path><path d="m5 11 4 4 6-6-4-4"></path><path d="M2 13 4 8l2 2-2 5Z"></path><path d="M22 13 20 8l-2 2 2 5Z"></path><path d="M12 22 4 15l10-10 8 7Z"></path>
+                </svg>
+                Legenda Daulat
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 ml-3 text-yellow-600">
+                    <path d="m14 6 4-4 6 6-4 4"></path><path d="m5 11 4 4 6-6-4-4"></path><path d="M2 13 4 8l2 2-2 5Z"></path><path d="M22 13 20 8l-2 2 2 5Z"></path><path d="M12 22 4 15l10-10 8 7Z"></path>
+                </svg>
+            </h1>
+            <p class="text-lg text-amber-700">Pengembaraan RPG Institusi Raja Malaysia</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-lg p-4 mb-4">
+                    <h3 class="font-bold text-lg mb-4 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 text-yellow-500">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        Status Pembesar
+                    </h3>
+
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-600">Level: <span id="stat-level">1</span></p>
+                        <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                            <div id="stat-exp-bar" class="bg-purple-500 h-2 rounded-full" style="width: 0%;"></div>
+                        </div>
+                        <p class="text-xs text-gray-500">EXP: <span id="stat-exp">0</span>/100</p>
+                    </div>
+                    <div id="stats-container">
+                        </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-4 mb-4">
+                    <h3 class="font-bold text-lg mb-3 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 text-gray-600">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path>
+                        </svg>
+                        Inventori
+                    </h3>
+                    <div id="inventory-list" class="space-y-2">
+                        </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-4">
+                    <h3 class="font-bold text-lg mb-3 flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 mr-2 text-green-600">
+                            <path d="M14.24 14.24a2 2 0 1 1-3.313-3.313L19 4 22 7Z"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        </svg>
+                        Peta Negeri
+                    </h3>
+                    <div id="map-grid" class="grid grid-cols-2 gap-2 text-xs">
+                        </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="mb-6">
+                        <div class="bg-amber-50 border-l-4 border-amber-400 p-4 rounded">
+                            <p id="story-text" class="text-gray-800 leading-relaxed text-lg min-h-[150px]">
+                                </p>
+                        </div>
+                    </div>
+
+                    <div id="choices-container" class="space-y-3">
+                        </div>
+
+                    <div id="loading-indicator" class="flex items-center justify-center p-4 hidden">
+                        <div class="flex space-x-2">
+                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce"></div>
+                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: '0.1s'"></div>
+                            <div class="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style="animation-delay: '0.2s'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 class="font-bold text-blue-800 mb-2">💡 Tips Permainan:</h4>
+                    <ul class="text-sm text-blue-700 space-y-1">
+                        <li>• <strong>Daulat</strong> meningkat apabila anda membuat keputusan yang bijak dan adil</li>
+                        <li>• <strong>Kebijaksanaan</strong> bertambah dengan mendengar dan belajar</li>
+                        <li>• <strong>Kesetiaan</strong> diperoleh dengan menjaga kepercayaan rakyat</li>
+                        <li>• <strong>Kekuatan</strong> berguna untuk menghadapi cabaran yang sukar</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            currentScene: 'intro',
+            playerName: '',
+            stats: {
+                daulat: 100,
+                kebijaksanaan: 50,
+                kesetiaan: 50,
+                kekuatan: 50,
+                level: 1,
+                exp: 0
+            },
+            inventory: ['Surat Pelantikan', 'Keris Pusaka'],
+            achievements: [],
+            visitedStates: [],
+            gameProgress: {
+                unlockedStates: ['perlis'],
+                completedQuests: [],
+                currentQuest: null
+            }
+        };
+
+        // States data
+        const states = {
+            perlis: { name: 'Perlis', ruler: 'Raja', difficulty: 1, color: 'bg-yellow-100' },
+            kedah: { name: 'Kedah', ruler: 'Sultan', difficulty: 2, color: 'bg-red-100' },
+            perak: { name: 'Perak', ruler: 'Sultan', difficulty: 2, color: 'bg-gray-100' },
+            selangor: { name: 'Selangor', ruler: 'Sultan', difficulty: 3, color: 'bg-blue-100' },
+            pahang: { name: 'Pahang', ruler: 'Sultan', difficulty: 3, color: 'bg-green-100' },
+            johor: { name: 'Johor', ruler: 'Sultan', difficulty: 4, color: 'bg-purple-100' },
+            kelantan: { name: 'Kelantan', ruler: 'Sultan', difficulty: 3, color: 'bg-indigo-100' },
+            terengganu: { name: 'Terengganu', ruler: 'Sultan', difficulty: 3, color: 'bg-teal-100' },
+            negerisembilan: { name: 'Negeri Sembilan', ruler: 'Yang di-Pertuan Besar', difficulty: 4, color: 'bg-orange-100' }
+        };
+
+        // Scenarios data
+        const scenarios = {
+            intro: {
+                text: "Selamat datang ke alam Tanah Melayu pada abad ke-15! Anda adalah seorang pembesar muda yang baru dilantik sebagai Wakil Raja untuk menjelajahi negeri-negeri Melayu dan memahami konsep Daulat serta Waadat. Misi anda adalah untuk mengeratkan hubungan antara raja dan rakyat, sambil mempelajari nilai-nilai kepimpinan yang murni.",
+                choices: [
+                    { text: "Mulakan pengembaraan sebagai Pembesar Muda", action: 'start_journey' },
+                    { text: "Pelajari dahulu tentang protokol istana", action: 'learn_protocol' }
+                ]
+            },
+            // --- NEW SCENARIO: Learn Protocol ---
+            learn_protocol: {
+                text: "Anda menghabiskan masa mempelajari adab dan tatasusila istana. Anda sedar bahawa 'Daulat' bukan sekadar kuasa, tetapi juga dihormati melalui cara pemimpin berinteraksi dengan istana dan rakyat. Ini meningkatkan pemahaman anda tentang peranan Raja.",
+                choices: [
+                    { text: "Kembali ke misi utama: Mulakan pengembaraan", action: 'start_journey', stats: { kebijaksanaan: 15 } }
+                ]
+            },
+            start_journey: {
+                text: "Anda kini berada di Perlis, negeri paling utara Tanah Melayu. Raja Perlis menyambut kedatangan anda dengan penuh hormat. Baginda berkata: 'Wahai pembesar muda, untuk memahami Daulat yang sebenar, anda perlu menunjukkan kebijaksanaan dalam menangani masalah rakyat.' Tiba-tiba, seorang petani datang mengadu tentang masalah tanah.",
+                choices: [
+                    { text: "Dengar aduan petani dengan penuh perhatian", action: 'listen_farmer', stats: { kebijaksanaan: 10, kesetiaan: 5 } },
+                    { text: "Suruh petani berjumpa dengan pembesar lain", action: 'delegate_problem', stats: { daulat: -5, kesetiaan: -5 } },
+                    { text: "Menawarkan bantuan segera tanpa mendengar sepenuhnya", action: 'hasty_help', stats: { kekuatan: 5, kebijaksanaan: -5 } }
+                ]
+            },
+            // --- NEW SCENARIO: Delegate Problem ---
+            delegate_problem: {
+                text: "Anda menyuruh petani itu berjumpa dengan pembesar lain. Petani itu beredar dengan rasa hampa. Tindakan anda menyebabkan sebahagian rakyat mempersoalkan 'Daulat' anda, kerana anda kurang mendekati mereka.",
+                choices: [
+                    { text: "Kembali ke istana Perlis, cuba lagi", action: 'start_journey', stats: { daulat: -5 } },
+                    { text: "Cuba cari masalah lain untuk diselesaikan", action: 'seek_new_problem', stats: { kekuatan: 5 } } // A new path
+                ]
+            },
+            // --- NEW SCENARIO: Hasty Help ---
+            hasty_help: {
+                text: "Tanpa mendengar butiran penuh, anda menawarkan bantuan cepat. Walaupun niat anda baik, penyelesaian anda kurang tepat kerana anda tidak memahami akar masalahnya. Rakyat menghargai kepantasan, tetapi kebijaksanaan anda dipersoalkan.",
+                choices: [
+                    { text: "Belajar dari kesilapan, dengar lebih teliti", action: 'listen_farmer', stats: { kebijaksanaan: 10 } },
+                    { text: "Teruskan dengan pendekatan cepat", action: 'force_solution', stats: { kekuatan: 5, kebijaksanaan: -10 } } // Another new path
+                ]
+            },
+            listen_farmer: {
+                text: "Petani bercerita bahawa tanah pertaniannya dirampas oleh seorang pembesar tempatan yang tamak. Anda mendengar dengan sabar dan bertanya soalan-soalan yang tepat. Raja Perlis terkesan dengan pendekatan anda dan berkata: 'Inilah sikap yang menunjukkan pemahaman tentang Waadat - janji setia antara pemimpin dan rakyat.'",
+                choices: [
+                    { text: "Siasat sendiri kes rampasan tanah ini", action: 'investigate_land', stats: { kebijaksanaan: 10, daulat: 5 } },
+                    { text: "Lapor kepada Raja untuk tindakan rasmi", action: 'report_to_raja', stats: { kesetiaan: 10 } },
+                    { text: "Cuba berdamai antara kedua pihak", action: 'mediate_conflict', stats: { kebijaksanaan: 15 } }
+                ]
+            },
+            // --- NEW SCENARIO: Report to Raja ---
+            report_to_raja: {
+                text: "Anda melaporkan kes rampasan tanah ini kepada Raja Perlis. Baginda mengarahkan siasatan penuh. Prosesnya lambat, tetapi akhirnya keadilan ditegakkan. Rakyat melihat anda sebagai setia kepada sistem, tetapi kurang berani dalam tindakan langsung.",
+                choices: [
+                    { text: "Terima kasih atas bantuan Raja", action: 'perlis_resolved_by_raja', stats: { daulat: 5, kesetiaan: 10 } }
+                ]
+            },
+            // --- NEW SCENARIO: Perlis Resolved by Raja ---
+            perlis_resolved_by_raja: {
+                text: "Keadilan ditegakkan oleh Raja. Anda telah memainkan peranan anda, namun Raja Perlis berkata: 'Kadang-kadang, seorang pembesar perlu turun padang sendiri. Tetapi kesetiaanmu amat kami hargai.' Anda kini boleh meneruskan pengembaraan.",
+                choices: [
+                    { text: "Pergi ke Kedah untuk misi seterusnya", action: 'travel_kedah' },
+                    { text: "Tinggal lebih lama di Perlis untuk belajar lagi", action: 'stay_perlis', stats: { kebijaksanaan: 10 } }
+                ]
+            },
+            // --- NEW SCENARIO: Mediate Conflict ---
+            mediate_conflict: {
+                text: "Anda berjaya menjadi perantara antara petani dan pembesar tamak itu. Dengan hujah yang bernas dan sikap adil, anda meyakinkan pembesar itu untuk memulangkan tanah. Kedua-dua pihak bersetuju dengan penyelesaian anda, menunjukkan kebijaksanaan dalam menjaga keharmonian.",
+                choices: [
+                    { text: "Laporkan kejayaan mediasi kepada Raja", action: 'present_evidence', stats: { daulat: 10, kebijaksanaan: 5 } } // Reuse present_evidence path for success
+                ]
+            },
+            investigate_land: {
+                text: "Siasatan anda mendapati bahawa pembesar tempatan itu memang telah melakukan penyelewengan. Anda menemui dokumen-dokumen yang membuktikan tanah itu sah milik petani. Namun, pembesar tersebut mempunyai pengaruh yang kuat. Bagaimana anda akan bertindak?",
+                choices: [
+                    { text: "Hadirkan bukti terus kepada Raja", action: 'present_evidence', stats: { daulat: 15, kesetiaan: 10 } },
+                    { text: "Konfrontasi pembesar korup secara terus", action: 'confront_corrupt', stats: { kekuatan: 10, daulat: -5, kesetiaan: -5 } },
+                    { text: "Cari jalan penyelesaian diplomatik", action: 'diplomatic_solution', stats: { kebijaksanaan: 20, kesetiaan: 5 } }
+                ]
+            },
+            // --- NEW SCENARIO: Confront Corrupt ---
+            confront_corrupt: {
+                text: "Anda bersemuka dengan pembesar korup itu. Walaupun anda berjaya mendapatkan tanah kembali, tindakan anda yang agresif menimbulkan ketidakpuasan hati di kalangan beberapa pembesar lain. Raja Perlis terkesan dengan keberanian anda, tetapi mengingatkan tentang pentingnya diplomasi.",
+                choices: [
+                    { text: "Meneruskan perjalanan ke negeri lain", action: 'travel_kedah', stats: { kekuatan: 5 } },
+                    { text: "Refleksi dan belajar dari tindakan ini", action: 'learn_diplomacy', stats: { kebijaksanaan: 10 } } // A new path
+                ]
+            },
+            // --- NEW SCENARIO: Diplomatic Solution ---
+            diplomatic_solution: {
+                text: "Anda menggunakan kepintaran dan perbincangan untuk menyelesaikan konflik. Pembesar korup bersetuju mengembalikan tanah dan menerima hukuman ringan. Raja Perlis memuji kebijaksanaan anda dalam menyelesaikan masalah tanpa konfrontasi keras, mengukuhkan 'Daulat' anda.",
+                choices: [
+                    { text: "Lapor kejayaan kepada Raja", action: 'present_evidence', stats: { daulat: 10, kebijaksanaan: 5 } }
+                ]
+            },
+            present_evidence: {
+                text: "Raja Perlis sangat gembira dengan dedikasi anda. Baginda berkata: 'Anda telah menunjukkan bahawa Daulat yang sebenar datang daripada keadilan, bukan dari kuasa semata-mata.' Pembesar korup dihukum dan tanah dipulangkan kepada petani. Anda diberi gelaran 'Pembela Keadilan' dan mendapat kepercayaan untuk melawat negeri seterusnya.",
+                choices: [
+                    { text: "Pergi ke Kedah untuk misi seterusnya", action: 'travel_kedah' },
+                    { text: "Tinggal lebih lama di Perlis untuk belajar lagi", action: 'stay_perlis', stats: { kebijaksanaan: 10 } },
+                    { text: "Kembali ke istana untuk melaporkan kejayaan", action: 'report_success' }
+                ]
+            },
+            // --- NEW SCENARIO: Stay Perlis ---
+            stay_perlis: {
+                text: "Anda memutuskan untuk tinggal lebih lama di Perlis, mendalami adat resam dan masalah rakyat tempatan. Anda belajar banyak tentang bagaimana institusi raja berinteraksi dengan rakyat, dan kebijaksanaan anda bertambah.",
+                choices: [
+                    { text: "Bersedia untuk pergi ke Kedah", action: 'travel_kedah', stats: { kebijaksanaan: 5 } }
+                ]
+            },
+            // --- NEW SCENARIO: Report Success ---
+            report_success: {
+                text: "Anda kembali ke istana utama untuk melaporkan kejayaan anda di Perlis. Pembesar-pembesar lain memuji anda, dan kemasyhuran anda tersebar luas. Ini menandakan permulaan perjalanan anda yang lebih besar.",
+                choices: [
+                    { text: "Teruskan pengembaraan ke Kedah", action: 'travel_kedah', stats: { daulat: 5 } }
+                ]
+            },
+            travel_kedah: {
+                text: "Anda tiba di Kedah, negeri padi yang subur. Sultan Kedah memberitahu anda tentang masalah baru: 'Pembesar muda, rakyat di sini berpecah-belah kerana perselisihan antara dua kumpulan yang berbeza pendapat tentang cara menghormati institusi raja. Anda perlu membantu menyatukan mereka.'",
+                choices: [
+                    { text: "Adakan majlis dialog terbuka", action: 'open_dialogue', stats: { kebijaksanaan: 15, kesetiaan: 10 } },
+                    { text: "Belajar sejarah perselisihan ini dahulu", action: 'study_conflict', stats: { kebijaksanaan: 20 } },
+                    { text: "Gunakan autoriti untuk memaksa perdamaian", action: 'force_peace', stats: { kekuatan: 10, daulat: -10 } }
+                ]
+            },
+            // --- NEW SCENARIO: Study Conflict ---
+            study_conflict: {
+                text: "Anda menyelidiki sejarah perselisihan ini dan mendapati ia berpunca daripada salah faham tentang konsep 'Derhaka' dan 'Waadat'. Anda kini lebih bersedia untuk mencari penyelesaian yang mendalam.",
+                choices: [
+                    { text: "Adakan dialog berdasarkan penemuan anda", action: 'open_dialogue', stats: { kebijaksanaan: 10 } }
+                ]
+            },
+            // --- NEW SCENARIO: Force Peace ---
+            force_peace: {
+                text: "Anda cuba memaksa kedua-dua kumpulan untuk berdamai menggunakan autoriti anda. Walaupun mereka akur, perdamaian itu hanya di permukaan. Rakyat bimbang tentang 'Daulat' yang dipaksakan, bukan yang diperoleh melalui keadilan dan pemahaman.",
+                choices: [
+                    { text: "Teruskan ke negeri Perak, berharap masalah tidak berulang", action: 'travel_perak', stats: { daulat: -5 } }
+                ]
+            },
+            open_dialogue: {
+                text: "Majlis dialog yang anda adakan berjalan lancar. Anda berjaya menjelaskan bahawa konsep Waadat bermaksud kesetiaan yang tidak memerlukan perpecahan, tetapi perpaduan dalam kepelbagaian. Kedua-dua kumpulan mula memahami dan berdamai. Sultan Kedah menganugerahkan anda dengan 'Pingat Perpaduan'.",
+                choices: [
+                    { text: "Sambung ke negeri Perak", action: 'travel_perak' },
+                    { text: "Adakan program pendidikan untuk rakyat", action: 'education_program', stats: { kebijaksanaan: 15, kesetiaan: 10 } },
+                    { text: "Dokumentasikan pengalaman ini", action: 'document_experience', stats: { kebijaksanaan: 10 } }
+                ]
+            },
+            // --- NEW SCENARIO: Education Program ---
+            education_program: {
+                text: "Anda melancarkan program pendidikan untuk meningkatkan pemahaman rakyat tentang peranan institusi Raja dan nilai-nilai Waadat. Kesetiaan rakyat kepada Raja bertambah kuat, dan anda dilihat sebagai pembawa ilmu.",
+                choices: [
+                    { text: "Pergi ke negeri Perak", action: 'travel_perak', stats: { kesetiaan: 5 } }
+                ]
+            },
+            // --- NEW SCENARIO: Document Experience ---
+            document_experience: {
+                text: "Anda mencatat semua pengalaman dan pengajaran anda. Dokumen ini menjadi rujukan penting untuk pembesar lain. Kebijaksanaan anda diiktiraf, dan anda kini bersedia untuk pengembaraan seterusnya.",
+                choices: [
+                    { text: "Teruskan ke negeri Perak", action: 'travel_perak', stats: { kebijaksanaan: 5 } }
+                ]
+            },
+            travel_perak: {
+                text: "Anda tiba di Perak, negeri yang kaya dengan sejarah dan budaya. Sultan Perak menghadapi cabaran baharu: 'Pembesar muda, terdapat usaha dari luar untuk melemahkan institusi Raja kita dengan menyebarkan fitnah. Bagaimana anda akan melindungi Daulat Raja?'",
+                choices: [
+                    { text: "Kuatkan pengawal istana dan perketat kawalan sempadan", action: 'strengthen_guards', stats: { kekuatan: 15, daulat: -5 } },
+                    { text: "Anjurkan kempen kesedaran tentang peranan Raja", action: 'awareness_campaign', stats: { kebijaksanaan: 20, kesetiaan: 15 } },
+                    { text: "Siasat punca penyebaran fitnah dan berdepan dalang", action: 'investigate_fitnah', stats: { kebijaksanaan: 15, kekuatan: 10 } }
+                ]
+            },
+            // --- NEW SCENARIO: Awareness Campaign (Leading to game completion) ---
+            awareness_campaign: {
+                text: "Anda menganjurkan kempen besar-besaran untuk mendidik rakyat tentang sejarah, peranan, dan kepentingan institusi Raja. Rakyat mula faham bahawa 'Daulat' Raja adalah payung negara yang perlu dilindungi. Kesetiaan mereka kepada Raja-raja bertambah utuh.",
+                choices: [
+                    { text: "Tamat pengembaraan anda sebagai pembela Daulat", action: 'game_complete_success' }
+                ]
+            },
+            // --- NEW SCENARIO: Investigate Fitnah (Leading to game completion) ---
+            investigate_fitnah: {
+                text: "Anda menyiasat secara rahsia dan menemui dalang di sebalik penyebaran fitnah. Dengan bukti yang kukuh, anda mendedahkan mereka dan mengembalikan reputasi institusi Raja. Tindakan anda yang berani dan bijak menyelamatkan 'Daulat' Raja dari ancaman luar.",
+                choices: [
+                    { text: "Tamat pengembaraan anda sebagai pembela Daulat", action: 'game_complete_success' }
+                ]
+            },
+            // --- NEW SCENARIO: Game Complete (Success) ---
+            game_complete_success: {
+                text: `Anda telah berjaya menyelesaikan misi anda sebagai Wakil Raja! Sepanjang pengembaraan anda, anda telah menunjukkan pemahaman mendalam tentang 'Daulat' dan 'Waadat'. Rakyat jelata hidup aman damai di bawah naungan Raja yang adil dan berwibawa. Tahniah, anda adalah Legenda Daulat!`,
+                choices: [
+                    { text: "Mulakan permainan baharu", action: 'intro' }
+                ]
+            },
+            // --- Placeholder/Failure/Minor Path Endings ---
+            seek_new_problem: {
+                text: "Anda mencari masalah baharu untuk diselesaikan, tetapi tanpa bimbingan yang jelas, anda sukar untuk membuat impak yang besar. Anda merasakan anda perlu lebih banyak pengalaman.",
+                choices: [
+                    { text: "Kembali ke istana utama untuk nasihat", action: 'report_success' }
+                ]
+            },
+            force_solution: {
+                text: "Pendekatan anda yang terburu-buru menyebabkan masalah lain timbul. Walaupun anda cuba memperbaiki keadaan, rakyat mula berhati-hati dengan tindakan anda. Daulat anda sedikit terjejas.",
+                choices: [
+                    { text: "Cuba belajar kebijaksanaan dari Raja lain", action: 'travel_kedah', stats: { kebijaksanaan: 5 } }
+                ]
+            },
+            learn_diplomacy: {
+                text: "Anda meluangkan masa untuk belajar tentang seni diplomasi. Ini membantu anda memahami bagaimana untuk menyelesaikan konflik dengan lebih berkesan pada masa hadapan. Kebijaksanaan anda meningkat.",
+                choices: [
+                    { text: "Bersedia untuk perjalanan ke Kedah", action: 'travel_kedah', stats: { kebijaksanaan: 5 } }
+                ]
+            },
+            strengthen_guards: {
+                text: "Anda mengerahkan lebih ramai pengawal dan memperketat kawalan. Keselamatan fizikal Raja terjamin, tetapi ketegangan meningkat di kalangan rakyat. 'Daulat' Raja sepatutnya dirasakan dalam hati rakyat, bukan hanya pada kekuatan senjata.",
+                choices: [
+                    { text: "Siasat punca fitnah secara rahsia", action: 'investigate_fitnah', stats: { kebijaksanaan: 5 } },
+                    { text: "Tamat permainan (outcome tidak optimum)", action: 'game_complete_neutral' }
+                ]
+            },
+            game_complete_neutral: {
+                text: "Pengembaraan anda telah tamat. Anda telah berusaha untuk melindungi institusi Raja, tetapi ada kalanya pendekatan anda kurang seimbang antara kekuatan dan kebijaksanaan. Anda telah belajar banyak, dan perjalanan anda diteruskan dalam ingatan rakyat.",
+                choices: [
+                    { text: "Mulakan permainan baharu", action: 'intro' }
+                ]
+            }
+            // Add more scenarios here as needed
+        };
+
+        // DOM Elements
+        const storyTextElement = document.getElementById('story-text');
+        const choicesContainer = document.getElementById('choices-container');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const statLevelElement = document.getElementById('stat-level');
+        const statExpElement = document.getElementById('stat-exp');
+        const statExpBarElement = document.getElementById('stat-exp-bar');
+        const statsContainer = document.getElementById('stats-container');
+        const inventoryListElement = document.getElementById('inventory-list');
+        const mapGridElement = document.getElementById('map-grid');
+
+        let isTyping = false;
+        let typingInterval; // Declare typingInterval to manage clearInterval
+
+        // Utility function to create SVG icons
+        function getIconSVG(iconName, classes = "") {
+            const icons = {
+                'Crown': '<path d="m14 6 4-4 6 6-4 4"></path><path d="m5 11 4 4 6-6-4-4"></path><path d="M2 13 4 8l2 2-2 5Z"></path><path d="M22 13 20 8l-2 2 2 5Z"></path><path d="M12 22 4 15l10-10 8 7Z"></path>',
+                'Book': '<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"></path>',
+                'Heart': '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>',
+                'Sword': '<path d="M20.5 10.5c.5 1.5 1 2.5 1 2.5a2.12 2.12 0 0 1-3.65 1.7L12 6 5.65 15.7c-1.7 1.7-2.12 2.5-3.65 1.7.5-1.5 1-2.5 1-2.5L10 2l10.5 8.5Z"></path><path d="M14.31 16.61a8 8 0 0 1 1.05 4.02"></path>',
+                'Shield': '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"></path>',
+                'Map': '<path d="M14.24 14.24a2 2 0 1 1-3.313-3.313L19 4 22 7Z"></path><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>'
+            };
+            return `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${classes}">
+                ${icons[iconName] || ''}
+            </svg>`;
+        }
+
+        // Render Stat Bar
+        function renderStatBar(label, value, iconName, color) {
+            return `
+                <div class="mb-2">
+                    <div class="flex items-center justify-between mb-1">
+                        <div class="flex items-center">
+                            ${getIconSVG(iconName, "w-4 h-4 mr-2")}
+                            <span class="text-sm font-medium">${label}</span>
+                        </div>
+                        <span class="text-sm">${value}/100</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="${color} h-2 rounded-full transition-all duration-300" style="width: ${value}%;"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Update UI functions
+        function updateStatsUI() {
+            statLevelElement.textContent = gameState.stats.level;
+            statExpElement.textContent = gameState.stats.exp;
+            statExpBarElement.style.width = `${gameState.stats.exp}%`;
+
+            let statsHtml = '';
+            statsHtml += renderStatBar("Daulat", gameState.stats.daulat, "Crown", "bg-yellow-500");
+            statsHtml += renderStatBar("Kebijaksanaan", gameState.stats.kebijaksanaan, "Book", "bg-blue-500");
+            statsHtml += renderStatBar("Kesetiaan", gameState.stats.kesetiaan, "Heart", "bg-red-500");
+            statsHtml += renderStatBar("Kekuatan", gameState.stats.kekuatan, "Sword", "bg-green-500");
+            statsContainer.innerHTML = statsHtml;
+        }
+
+        function updateInventoryUI() {
+            inventoryListElement.innerHTML = '';
+            gameState.inventory.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bg-gray-100 p-2 rounded text-sm';
+                div.textContent = item;
+                inventoryListElement.appendChild(div);
+            });
+        }
+
+        function updateMapUI() {
+            mapGridElement.innerHTML = '';
+            Object.entries(states).forEach(([key, state]) => {
+                const div = document.createElement('div');
+                let classes = `p-2 rounded text-center `;
+                if (gameState.visitedStates.includes(key)) {
+                    classes += 'bg-green-200 text-green-800';
+                } else if (gameState.gameProgress.unlockedStates.includes(key)) {
+                    classes += 'bg-yellow-200 text-yellow-800';
+                } else {
+                    classes += 'bg-gray-200 text-gray-500';
+                }
+                div.className = classes;
+                div.innerHTML = `<div class="font-medium">${state.name}</div><div class="text-xs">${state.ruler}</div>`;
+                mapGridElement.appendChild(div);
+            });
+        }
+
+        // Typewriter effect
+        function typeText(text, callback) {
+            isTyping = true;
+            storyTextElement.innerHTML = ''; // Clear previous text
+            choicesContainer.innerHTML = ''; // Clear previous choices
+            loadingIndicator.classList.remove('hidden');
+
+            let i = 0;
+            // Clear any existing typing interval to prevent multiple intervals running
+            if (typingInterval) {
+                clearInterval(typingInterval);
+            }
+
+            typingInterval = setInterval(() => {
+                storyTextElement.textContent = text.slice(0, i);
+                if (i < text.length) { // Only show cursor if typing is not finished
+                    storyTextElement.innerHTML += '<span class="animate-pulse">|</span>';
+                }
+
+                i++;
+                if (i > text.length) {
+                    clearInterval(typingInterval);
+                    storyTextElement.textContent = text; // Ensure final text is displayed without cursor
+                    isTyping = false;
+                    loadingIndicator.classList.add('hidden');
+                    if (callback) callback();
+                }
+            }, 30);
+        }
+
+        // Handle player choice
+        function handleChoice(choice) {
+            if (isTyping) return; // Prevent interaction during typing
+
+            // Reset game state if starting new game
+            if (choice.action === 'intro' && gameState.currentScene.startsWith('game_complete')) {
+                 gameState = {
+                    currentScene: 'intro',
+                    playerName: '',
+                    stats: {
+                        daulat: 100,
+                        kebijaksanaan: 50,
+                        kesetiaan: 50,
+                        kekuatan: 50,
+                        level: 1,
+                        exp: 0
+                    },
+                    inventory: ['Surat Pelantikan', 'Keris Pusaka'],
+                    achievements: [],
+                    visitedStates: [],
+                    gameProgress: {
+                        unlockedStates: ['perlis'],
+                        completedQuests: [],
+                        currentQuest: null
+                    }
+                };
+            }
+
+            let newStats = { ...gameState.stats };
+            if (choice.stats) {
+                Object.keys(choice.stats).forEach(stat => {
+                    newStats[stat] = Math.max(0, Math.min(100, newStats[stat] + choice.stats[stat]));
+                });
+
+                // Add experience
+                newStats.exp += 10;
+                if (newStats.exp >= 100) {
+                    newStats.level += 1;
+                    newStats.exp = 0;
+                    // Level up bonus
+                    Object.keys(newStats).forEach(stat => {
+                        if (stat !== 'level' && stat !== 'exp') {
+                            newStats[stat] = Math.min(100, newStats[stat] + 5);
+                        }
+                    });
+                }
+            }
+
+            // Update game state
+            gameState = {
+                ...gameState,
+                // Only update currentScene if choice.action exists
+                currentScene: choice.action || gameState.currentScene,
+                stats: newStats
+            };
+
+            // If a state transition occurs, add to visited states and unlock new states
+            if (choice.action && choice.action.startsWith('travel_')) { // Check if action exists
+                const newStateKey = choice.action.replace('travel_', '');
+                if (!gameState.visitedStates.includes(newStateKey)) {
+                    gameState.visitedStates.push(newStateKey);
+                }
+                // Example: unlock next state if not already unlocked (you might have more complex logic here)
+                if (newStateKey === 'kedah' && !gameState.gameProgress.unlockedStates.includes('perak')) {
+                    gameState.gameProgress.unlockedStates.push('perak');
+                }
+                if (newStateKey === 'perak' && !gameState.gameProgress.unlockedStates.includes('selangor')) {
+                    gameState.gameProgress.unlockedStates.push('selangor');
+                }
+            }
+
+            renderScene();
+        }
+
+        // Render current scene
+        function renderScene() {
+            const scene = scenarios[gameState.currentScene];
+            if (scene) {
+                typeText(scene.text, () => {
+                    renderChoices(scene.choices || []);
+                });
+            } else {
+                // Fallback if currentScene is not found, typically an error in scenario definitions
+                console.error("Scene not found:", gameState.currentScene);
+                typeText("Adegan tidak ditemui. Kembali ke intro.", () => {
+                    gameState.currentScene = 'intro';
+                    renderChoices(scenarios.intro.choices);
+                });
+            }
+            updateStatsUI();
+            updateInventoryUI();
+            updateMapUI();
+        }
+
+        // Render choices
+        function renderChoices(choices) {
+            choicesContainer.innerHTML = '<h3 class="font-bold text-lg text-gray-800 mb-4">Pilihan Anda:</h3>';
+            if (choices.length === 0) {
+                 choicesContainer.innerHTML += '<p class="text-gray-600">Tiada pilihan lagi. Permainan tamat atau perlu pembangunan lanjut.</p>';
+                 return;
+            }
+
+            choices.forEach((choice, index) => {
+                const button = document.createElement('button');
+                button.className = 'w-full text-left p-4 bg-gradient-to-r from-amber-100 to-yellow-100 hover:from-amber-200 hover:to-yellow-200 rounded-lg border border-amber-300 transition-all duration-200 hover:shadow-md group';
+                button.onclick = () => handleChoice(choice);
+
+                // --- MARKAH TIDAK DIPAPARKAN DI SINI ---
+                // Bahagian ini sengaja dikosongkan/dibuang supaya markah tidak dipaparkan
+                // pada butang pilihan. Logik pengemaskinian markah berlaku dalam handleChoice().
+                // let statsHtml = '';
+                // if (choice.stats) {
+                //     statsHtml = '<div class="flex space-x-2 text-xs">';
+                //     Object.entries(choice.stats).forEach(([stat, value]) => {
+                //         const statClass = value > 0 ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800';
+                //         statsHtml += `<span class="px-2 py-1 rounded ${statClass}">${stat}: ${value > 0 ? '+' : ''}${value}</span>`;
+                //     });
+                //     statsHtml += '</div>';
+                // }
+                // --- AKHIR BAHAGIAN TANPA MARKAH ---
+
+                button.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="font-medium text-gray-800 group-hover:text-amber-800">
+                            ${choice.text}
+                        </span>
+                        </div>
+                `;
+                choicesContainer.appendChild(button);
+            });
+        }
+
+        // Initialize the game
+        document.addEventListener('DOMContentLoaded', () => {
+            renderScene();
+        });
+    </script>
+</body>
+</html>
