@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titian Daulat: Pengembaraan Mencari Kedaulatan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Gaya asas untuk latar belakang, fon, dan teks */
+        body {
+            background-color: #e9ecef; /* Latar belakang kelabu muda */
+            font-family: 'Merriweather', serif; /* Fon serif untuk teks badan */
+            color: #343a40; /* Warna teks kelabu gelap */
+        }
+        /* Kontainer utama permainan dengan gaya kad */
+        .game-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #ffffff; /* Latar belakang putih */
+            border-radius: 15px; /* Sudut bulat */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Bayangan lembut */
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Gaya untuk tajuk utama permainan */
+        header h1 {
+            font-family: 'Playfair Display', serif; /* Fon khas untuk tajuk */
+            font-weight: 700;
+            color: #4a008c; /* Warna ungu diraja */
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        /* Kawasan permainan yang memisahkan panel cerita dan statistik */
+        .game-area {
+            display: flex;
+            flex-direction: column; /* Susun menegak pada skrin kecil */
+            gap: 20px; /* Jarak antara panel */
+        }
+        /* Susun mendatar pada skrin yang lebih besar (desktop/tablet) */
+        @media (min-width: 768px) {
+            .game-area {
+                flex-direction: row;
+            }
+        }
+        /* Panel cerita tempat teks dipaparkan */
+        .story-panel {
+            flex: 2; /* Mengambil 2/3 ruang pada skrin besar */
+            background-color: #f8f9fa; /* Latar belakang kelabu cerah */
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #dee2e6; /* Sempadan lembut */
+            min-height: 350px; /* Tinggi minimum */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Untuk meletakkan butang di bawah */
+        }
+        /* Gaya untuk teks cerita */
+        .story-text p {
+            line-height: 1.8; /* Jarak baris yang selesa */
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+        /* Gaya untuk butang pilihan */
+        .choices-buttons .btn {
+            width: 100%; /* Lebar penuh */
+            margin-bottom: 10px;
+            font-size: 1rem;
+            padding: 10px 15px;
+        }
+        /* Panel statistik pemain */
+        .stats-panel {
+            flex: 1; /* Mengambil 1/3 ruang pada skrin besar */
+            background-color: #e6e6fa; /* Lavender */
+            border-radius: 10px;
+            padding: 25px;
+            border: 1px solid #ced4da;
+            max-height: fit-content; /* Sesuai dengan kandungan */
+        }
+        /* Gaya untuk tajuk panel statistik */
+        .stats-panel h3 {
+            font-family: 'Playfair Display', serif;
+            color: #4a008c;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        /* Gaya untuk senarai statistik */
+        .stats-panel ul {
+            list-style: none; /* Buang bullet point */
+            padding: 0;
+            margin-bottom: 0;
+        }
+        .stats-panel ul li {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        .stats-panel ul li strong {
+            color: #343a40;
+        }
+        /* Gaya untuk borang penciptaan karakter */
+        .character-creation-form {
+            padding: 20px;
+            background-color: #f0f8ff; /* Alice Blue */
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #cce5ff;
+        }
+        /* Gaya untuk footer halaman */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <header>
+            <h1>Titian Daulat: Pengembaraan Mencari Kedaulatan</h1>
+            <p class="lead text-center">Setiap pilihan menentukan nasib kerajaan. Mampukah anda mengembalikan daulat?</p>
+            <hr>
+        </header>
+
+        <main>
+            <!-- Bahagian penciptaan karakter -->
+            <div id="characterCreation" class="character-creation-form">
+                <h2 class="text-center text-primary mb-4">Mula Pengembaraan Anda!</h2>
+                <form id="creationForm">
+                    <div class="mb-3">
+                        <label for="playerName" class="form-label">Apakah nama anda, pengembara muda?</label>
+                        <input type="text" class="form-control" id="playerName" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label d-block">Pilih asal-usul anda:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="origin" id="originFarmer" value="farmer" required>
+                            <label class="form-check-label" for="originFarmer">
+                                **Anak Petani:** +5 Ketahanan, mahir dalam kemahiran hidup.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="origin" id="originMerchant" value="merchant">
+                            <label class="form-check-label" for="originMerchant">
+                                **Pewaris Pedagang:** +5 Kebijaksanaan, mahir dalam tawar-menawar.
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="origin" id="originWarrior" value="warrior">
+                            <label class="form-check-label" for="originWarrior">
+                                **Pengikut Hulu Balang:** +5 Kekuatan, mahir dalam pertarungan.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">Mula Perjalanan!</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Bahagian permainan utama -->
+            <div id="gamePlay" class="game-area" style="display: none;">
+                <div class="story-panel">
+                    <div id="storyText" class="story-text">
+                        <!-- Teks cerita akan dipaparkan di sini -->
+                    </div>
+                    <div id="choices" class="choices-buttons mt-4">
+                        <!-- Butang pilihan akan dipaparkan di sini -->
+                    </div>
+                </div>
+                <div class="stats-panel">
+                    <h3>Statistik Anda</h3>
+                    <ul id="playerStats">
+                        <!-- Statistik pemain akan dipaparkan di sini -->
+                    </ul>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2025 Titian Daulat. Semua Hak Cipta Terpelihara.</p>
+            <p><small>Dibangunkan sebagai contoh game RPG berasaskan teks.</small></p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JavaScript Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mendapatkan rujukan elemen HTML
+        const characterCreationDiv = document.getElementById('characterCreation');
+        const gamePlayDiv = document.getElementById('gamePlay');
+        const creationForm = document.getElementById('creationForm');
+        const playerNameInput = document.getElementById('playerName');
+        const storyTextDiv = document.getElementById('storyText');
+        const choicesDiv = document.getElementById('choices');
+        const playerStatsList = document.getElementById('playerStats');
+
+        // Objek global untuk menyimpan keadaan permainan
+        let gameState = {};
+
+        // Definisi adegan permainan dan sifat-sifatnya
+        // Setiap adegan mempunyai teks cerita, pilihan, dan fungsi onEnter (jika ada)
+        const gameScenes = {
+            'intro': {
+                text: "Negeri Indera Cahaya, sebuah permata di tanah Melayu, kini diselubungi kegelapan. Rakyat hidup dalam ketakutan, pembesar saling berebut kuasa, dan Raja Mahkota, yang pernah menjadi payung kedaulatan, kini uzur dan murung. Khabar angin mengatakan daulat baginda telah diragut, dan tanpa daulat, kerajaan ini akan runtuh. Anda, [playerName], merasakan panggilan hati yang kuat. Adakah anda akan membiarkan kegelapan ini berpanjangan, atau bangkit mencari jalan mengembalikan sinar kedaulatan?",
+                choices: [
+                    { text: "Mula pengembaraan dari kampung halaman.", nextScene: 'villageStart' },
+                    { text: "Terus ke kota diraja untuk mendapatkan maklumat.", nextScene: 'cityStart', requires: { 'kekuatan': 15 }, failureText: "Anda cuba menyelinap masuk ke kota tetapi pengawal terlalu ramai. Anda terpaksa berundur." },
+                    { text: "Mencari guru tua di hutan tebal.", nextScene: 'forestGuru', requires: { 'ketahanan': 12 }, failureText: "Hutan terlalu tebal dan berbahaya. Anda hampir sesat dan terpaksa berpatah balik." }
+                ]
+            },
+            'villageStart': {
+                text: "Anda melangkah keluar dari rumah, ibu bapa memberikan restu dan sebungkus nasi serta 10 keping Wang Perak. Di pintu kampung, anda melihat seorang budak menangis. Sekumpulan pahlawan bayangan mengganggu pedagang yang cuba membawa hasil kebun ke kota. Mereka menuntut 'cukai' yang tinggi.",
+                onEnter: function() {
+                    gameState.player.wang_perak += 10; // Tambah wang
+                    gameState.player.inventori.push("Nasi Bungkus"); // Tambah item ke inventori
+                },
+                choices: [
+                    { text: "Berdepan dengan pahlawan bayangan.", nextScene: 'challengeFight', requires: { 'kekuatan': 15 }, failureText: "Anda cuba melawan tetapi pahlawan bayangan terlalu kuat. Anda menerima kecederaan ringan (-5 Nyawa) dan terpaksa berundur." },
+                    { text: "Cuba berunding dengan pahlawan bayangan.", nextScene: 'challengeNegotiate', requires: { 'kebijaksanaan': 13 }, failureText: "Kata-kata anda tidak memberi kesan. Pahlawan bayangan itu ketawa dan menindas pedagang." },
+                    { text: "Mencari jalan lain untuk pedagang.", nextScene: 'challengeDetour', requires: { 'ketahanan': 10, 'kebijaksanaan': 10 }, failureText: "Anda cuba mencari jalan lain tetapi kawasan itu dipenuhi ranjau atau halangan yang tidak dapat dilalui." }
+                ]
+            },
+            'challengeFight': {
+                text: "Anda berdepan dengan gagah. Pahlawan bayangan terkejut dengan kekuatan anda dan beredar. Pedagang itu berterima kasih.",
+                onEnter: function() {
+                    gameState.player.daulat_peribadi += 5; // Meningkatkan Daulat Peribadi
+                },
+                choices: [
+                    { text: "Teruskan perjalanan ke kota.", nextScene: 'cityArrival' }
+                ]
+            },
+            'challengeNegotiate': {
+                text: "Dengan kata-kata yang penuh hikmah, anda meyakinkan pahlawan bayangan bahawa penindasan hanya akan membawa kehancuran kepada mereka sendiri. Mereka bersetuju beredar dengan sebahagian kecil wang. Pedagang itu berterima kasih dan memberikan anda sekeping **Azimat Perlindungan**.",
+                onEnter: function() {
+                    gameState.player.daulat_peribadi += 5;
+                    gameState.player.inventori.push("Azimat Perlindungan");
+                    gameState.player.ketahanan += 1; // Azimat memberi kesan kepada stat
+                },
+                choices: [
+                    { text: "Teruskan perjalanan ke kota.", nextScene: 'cityArrival' }
+                ]
+            },
+            'challengeDetour': {
+                text: "Anda berjaya mencari jalan alternatif yang selamat untuk pedagang. Walaupun memakan masa, mereka tiba di kota tanpa gangguan. Pedagang itu berterima kasih atas kebijaksanaan anda.",
+                onEnter: function() {
+                    gameState.player.daulat_peribadi += 3;
+                },
+                choices: [
+                    { text: "Teruskan perjalanan ke kota.", nextScene: 'cityArrival' }
+                ]
+            },
+            'cityStart': {
+                text: "Anda menyelinap masuk ke Kota Indera Cahaya. Suasana di kota kelihatan muram, tidak seperti dahulu. Pengawal kelihatan lesu. Anda perlu berhati-hati.",
+                choices: [
+                    { text: "Cari penginapan untuk berehat.", nextScene: 'cityInn' },
+                    { text: "Cari maklumat di pasar yang sibuk.", nextScene: 'cityMarket' }
+                ]
+            },
+            'forestGuru': {
+                text: "Setelah menempuh hutan tebal, anda tiba di sebuah pondok usang. Seorang guru tua yang berjambang putih sedang duduk bertafakur. Beliau memandang anda dengan pandangan penuh hikmah.",
+                onEnter: function() {
+                    gameState.player.ketahanan -= 2; // Perjalanan hutan mengurangkan ketahanan
+                    if (gameState.player.ketahanan <= 0) gameState.player.nyawa -= 10; // Kesan jika ketahanan terlalu rendah
+                },
+                choices: [
+                    { text: "Meminta nasihat dari guru tua.", nextScene: 'guruAdvice' },
+                    { text: "Meminta beliau mengajar ilmu pertahanan diri.", nextScene: 'guruTeachFight', requires: { 'kekuatan': 10 }, failureText: "Anda tidak bersedia untuk latihan keras guru ini." }
+                ]
+            },
+            'guruAdvice': {
+                text: "Guru tua itu tersenyum. 'Kedaulatan tidak terletak pada kuasa semata, tetapi pada hati yang ikhlas dan kebijaksanaan yang teguh.' Beliau memberikan anda sebuah buku purba. Anda merasakan sedikit inspirasi.",
+                onEnter: function() {
+                    gameState.player.kebijaksanaan += 3;
+                    gameState.player.daulat_peribadi += 2;
+                    gameState.player.inventori.push("Buku Purba");
+                },
+                choices: [
+                    { text: "Berterima kasih dan teruskan perjalanan ke kota.", nextScene: 'cityArrival' }
+                ]
+            },
+            'guruTeachFight': {
+                text: "Guru tua itu mengajar anda beberapa teknik asas pertahanan diri. Anda kini lebih yakin dalam menghadapi cabaran fizikal.",
+                onEnter: function() {
+                    gameState.player.kekuatan += 5;
+                },
+                choices: [
+                    { text: "Berterima kasih dan teruskan perjalanan ke kota.", nextScene: 'cityArrival' }
+                ]
+            },
+            'cityArrival': {
+                text: "Anda tiba di pintu gerbang Kota Indera Cahaya. Suasana di kota kelihatan muram, tidak seperti dahulu. Pengawal kelihatan lesu. Anda perlu mencari tahu apa yang berlaku.",
+                choices: [
+                    { text: "Cari penginapan untuk berehat.", nextScene: 'cityInn' },
+                    { text: "Cari maklumat di pasar yang sibuk.", nextScene: 'cityMarket' }
+                ]
+            },
+            'cityInn': {
+                text: "Anda memasuki sebuah rumah penginapan usang. Pemiliknya, seorang wanita tua, mengeluh tentang keadaan kota. 'Daulat raja semakin pudar, dan kegelapan ini takkan berakhir selagi tiada yang berani bangkit,' katanya.",
+                onEnter: function() {
+                    gameState.player.wang_perak -= 5; // Kos penginapan
+                    if (gameState.player.wang_perak < 0) gameState.player.wang_perak = 0; // Pastikan wang tak negatif
+                    gameState.player.nyawa += 10; // Berehat menambah nyawa
+                },
+                choices: [
+                    { text: "Tanya lebih lanjut tentang Raja dan daulatnya.", nextScene: 'innInfo' },
+                    { text: "Berehat untuk hari ini dan teruskan esok.", nextScene: 'cityArrival' }
+                ]
+            },
+            'innInfo': {
+                text: "Wanita tua itu menceritakan tentang 'Penyihir Bayangan' yang dipercayai meragut sebahagian daulat Raja. 'Hanya dengan mencari Khazanah Kedaulatan purba di Tanah Reruntuhan lama, daulat itu boleh dikembalikan,' bisiknya.",
+                choices: [
+                    { text: "Tanya arah ke Tanah Reruntuhan.", nextScene: 'toRuins' },
+                    { text: "Berterima kasih dan bersedia untuk misi baru.", nextScene: 'cityArrival' }
+                ]
+            },
+            'cityMarket': {
+                text: "Pasar yang dulunya sibuk kini lengang. Beberapa pedagang cuba mencari rezeki, tetapi harga barangan melambung tinggi. Anda terdengar beberapa bisikan tentang 'Krisis Daulat' dan 'Pembesar Pengkhianat'.",
+                choices: [
+                    { text: "Cuba tawar-menawar untuk mendapatkan maklumat.", nextScene: 'marketBargain', requires: { 'kebijaksanaan': 15 }, failureText: "Pedagang enggan bercakap lebih lanjut, bimbang." },
+                    { text: "Cari barang yang berguna.", nextScene: 'marketBuy' }
+                ]
+            },
+            'marketBargain': {
+                text: "Dengan kebijaksanaan anda, seorang pedagang bersetuju untuk berkongsi rahsia. Beliau menceritakan tentang 'Amulet Kedaulatan' yang dikatakan hilang di dalam Gua Naga. Ia adalah salah satu Khazanah Kedaulatan.",
+                onEnter: function() {
+                    gameState.player.daulat_peribadi += 3;
+                },
+                choices: [
+                    { text: "Tanya arah ke Gua Naga.", nextScene: 'toDragonCave' },
+                    { text: "Berterima kasih dan bersedia untuk misi baru.", nextScene: 'cityArrival' }
+                ]
+            },
+            'marketBuy': {
+                text: "Anda melihat beberapa barang yang mungkin berguna. Anda membeli sebilah Pisau Kecil dan beberapa Bekalan Makanan.",
+                onEnter: function() {
+                    gameState.player.wang_perak -= 10;
+                    if (gameState.player.wang_perak < 0) gameState.player.wang_perak = 0;
+                    gameState.player.inventori.push("Pisau Kecil", "Bekalan Makanan");
+                },
+                choices: [
+                    { text: "Teruskan pengembaraan.", nextScene: 'cityArrival' }
+                ]
+            },
+            'toRuins': {
+                text: "Anda kini dalam perjalanan ke Tanah Reruntuhan. Perjalanan ini dipenuhi dengan bahaya dan kemungkinan pertemuan dengan makhluk purba. Adakah anda bersedia?",
+                choices: [
+                    { text: "Teruskan dengan berhati-hati.", nextScene: 'ruinsEntrance' },
+                    { text: "Kembali ke kota untuk persiapan lanjut.", nextScene: 'cityArrival' }
+                ]
+            },
+            'toDragonCave': {
+                text: "Perjalanan ke Gua Naga akan berbahaya. Anda perlu menempuh banjaran gunung yang tinggi dan mungkin berhadapan dengan bahaya yang tidak dijangka.",
+                choices: [
+                    { text: "Beranikan diri dan masuk ke gua.", nextScene: 'dragonCaveEntrance' },
+                    { text: "Fikirkan semula dan kembali ke kota.", nextScene: 'cityArrival' }
+                ]
+            },
+            // Example of a game over scene
+            'gameOver': {
+                text: "Perjalanan anda berakhir di sini. Kedaulatan tidak dapat dikembalikan, dan kegelapan menelan Negeri Indera Cahaya. GAME OVER.",
+                choices: [] // Tiada pilihan, permainan tamat
+            },
+            // Example of a victory scene (you'd have to build more logic for this)
+            'victory': {
+                text: "Dengan keberanian dan kebijaksanaan anda, Khazanah Kedaulatan berjaya dikembalikan! Daulat Raja Mahkota bersinar semula, dan Negeri Indera Cahaya kembali makmur. Anda diisytiharkan sebagai wira kerajaan! TAHNIAH!",
+                choices: []
+            }
+        };
+
+        // Event listener untuk borang penciptaan karakter
+        creationForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah muat semula halaman
+
+            const playerName = playerNameInput.value.trim();
+            const origin = document.querySelector('input[name="origin"]:checked');
+
+            if (!playerName || !origin) {
+                // Gunakan modal atau mesej dalam halaman jika tidak ada alert()
+                alert("Sila lengkapkan nama dan asal-usul anda!");
+                return;
+            }
+
+            // Inisialisasi keadaan permainan (game state)
+            gameState = {
+                player: {
+                    name: playerName,
+                    kekuatan: 10,
+                    kebijaksanaan: 10,
+                    ketahanan: 10,
+                    daulat_peribadi: 0,
+                    wang_perak: 0,
+                    nyawa: 100,
+                    inventori: []
+                },
+                currentScene: 'intro' // Mulakan dari adegan intro
+            };
+
+            // Sesuaikan statistik mengikut asal-usul yang dipilih
+            switch (origin.value) {
+                case 'farmer':
+                    gameState.player.ketahanan += 5;
+                    break;
+                case 'merchant':
+                    gameState.player.kebijaksanaan += 5;
+                    break;
+                case 'warrior':
+                    gameState.player.kekuatan += 5;
+                    break;
+            }
+
+            // Sembunyikan borang penciptaan karakter dan paparkan kawasan permainan
+            characterCreationDiv.style.display = 'none';
+            gamePlayDiv.style.display = 'flex'; // Menggunakan flexbox untuk susun atur yang betul
+
+            // Mulakan adegan pertama
+            displayScene(gameState.currentScene);
+            updateStatsDisplay(); // Kemas kini paparan statistik awal
+        });
+
+        // Fungsi untuk memaparkan adegan permainan
+        function displayScene(sceneId) {
+            const scene = gameScenes[sceneId];
+            if (!scene) {
+                console.error("ID adegan tidak ditemui:", sceneId);
+                storyTextDiv.innerHTML = "<p>Ralat: Adegan tidak ditemui. Permainan tamat.</p>";
+                choicesDiv.innerHTML = '';
+                return;
+            }
+
+            gameState.currentScene = sceneId; // Kemas kini adegan semasa dalam keadaan permainan
+
+            // Lakukan fungsi 'onEnter' jika ada (untuk kesan sampingan adegan)
+            if (scene.onEnter && typeof scene.onEnter === 'function') {
+                scene.onEnter();
+            }
+
+            // Gantikan placeholder nama pemain dalam teks cerita
+            let displayText = scene.text.replace('[playerName]', gameState.player.name);
+            storyTextDiv.innerHTML = `<p>${displayText}</p>`;
+
+            // Kosongkan butang pilihan sebelumnya
+            choicesDiv.innerHTML = '';
+
+            // Paparkan butang pilihan baharu
+            if (scene.choices && scene.choices.length > 0) {
+                scene.choices.forEach((choice, index) => {
+                    const button = document.createElement('button');
+                    button.classList.add('btn', 'btn-primary', 'btn-block'); // btn-block untuk lebar penuh
+                    button.textContent = choice.text;
+                    // Lampirkan event listener untuk setiap butang pilihan
+                    button.onclick = () => makeChoice(index);
+                    choicesDiv.appendChild(button);
+                });
+            } else {
+                // Jika tiada pilihan, permainan tamat atau menunggu arahan lain
+                storyTextDiv.innerHTML += '<p class="text-center mt-4">--- Tamat Pengembaraan ---</p>';
+            }
+
+            updateStatsDisplay(); // Sentiasa kemas kini statistik selepas setiap adegan
+            checkGameOver(); // Periksa keadaan game over
+        }
+
+        // Fungsi untuk mengendalikan pilihan pemain
+        function makeChoice(choiceIndex) {
+            const currentScene = gameScenes[gameState.currentScene];
+            const chosenOption = currentScene.choices[choiceIndex];
+
+            if (!chosenOption) {
+                console.error("Indeks pilihan tidak ditemui.");
+                return;
+            }
+
+            // Semak jika pemain memenuhi keperluan (statistik minimum) untuk pilihan
+            if (chosenOption.requires) {
+                let meetsRequirements = true;
+                let failureMessage = "";
+                for (const stat in chosenOption.requires) {
+                    if (gameState.player[stat] < chosenOption.requires[stat]) {
+                        meetsRequirements = false;
+                        failureMessage = chosenOption.failureText || `Anda tidak mempunyai ${stat} yang mencukupi untuk pilihan ini (Diperlukan ${chosenOption.requires[stat]} ${stat}).`;
+                        break;
+                    }
+                }
+                if (!meetsRequirements) {
+                    // Paparkan mesej kegagalan dalam teks cerita
+                    storyTextDiv.innerHTML += `<p class="text-danger mt-3"><em>${failureMessage}</em></p>`;
+                    return; // Kekal pada adegan semasa jika keperluan tidak dipenuhi
+                }
+            }
+            
+            // Maju ke adegan seterusnya
+            displayScene(chosenOption.nextScene);
+        }
+
+        // Fungsi untuk mengemas kini paparan statistik pemain
+        function updateStatsDisplay() {
+            const player = gameState.player;
+            if (!player) return; // Pastikan objek pemain wujud
+
+            playerStatsList.innerHTML = `
+                <li><strong>Nama:</strong> ${player.name}</li>
+                <li><strong>Nyawa:</strong> <span class="${player.nyawa <= 30 ? 'text-danger fw-bold' : ''}">${player.nyawa}</span> / 100</li>
+                <li><strong>Kekuatan:</strong> ${player.kekuatan}</li>
+                <li><strong>Kebijaksanaan:</strong> ${player.kebijaksanaan}</li>
+                <li><strong>Ketahanan:</strong> ${player.ketahanan}</li>
+                <li><strong>Daulat Peribadi:</strong> ${player.daulat_peribadi}</li>
+                <li><strong>Wang Perak:</strong> ${player.wang_perak}</li>
+                <li><strong>Inventori:</strong> ${player.inventori.length > 0 ? player.inventori.join(', ') : 'Tiada'}</li>
+            `;
+        }
+
+        // Fungsi untuk memeriksa keadaan Game Over
+        function checkGameOver() {
+            if (gameState.player.nyawa <= 0) {
+                displayScene('gameOver');
+            }
+        }
+    </script>
+</body>
+</html>
