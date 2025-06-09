@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuiz Interaktif: Institusi Raja</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/cikgumie/interactive_quiz@refs/heads/main/styles.css" />
+</head>
+<body>
+  <div class="game-container">
+    <div class="header">
+      <h1>🏰 Kuiz Interaktif Institusi Raja</h1>
+      <p>Tingkatan 2 - Unit 1: Institusi Raja Payung Negara</p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+    </div>
+    <div class="game-content">
+      <div class="start-screen" id="startScreen">
+        <h2>🇲🇾 Selamat Datang!</h2>
+        <p style="font-size: 1.2em; margin: 30px 0; color: #666;">
+          Uji pengetahuan anda tentang Institusi Raja Malaysia dan dunia
+        </p>
+        <div class="name-input-container">
+          <label for="userNameInput">Masukkan Nama Anda:</label>
+          <input type="text" id="userNameInput" placeholder="Contoh: Aminah" class="name-input" />
+        </div>
+        <div class="stats">
+          <div class="stat-card"><div class="stat-number">12</div><div>Soalan</div></div>
+          <div class="stat-card"><div class="stat-number">5</div><div>Jenis Soalan</div></div>
+          <div class="stat-card"><div class="stat-number">⏱️</div><div>Tiada Had Masa</div></div>
+        </div>
+        <div style="margin: 20px 0; font-size: 1.1em; color: #555;">
+          <p><strong>Jenis Soalan:</strong></p>
+          <p>🔘 Pilihan Berganda • 🔄 Drag & Drop • 🔗 Matching • ✏️ Isi Tempat Kosong • ✅ Betul/Salah</p>
+        </div>
+        <button class="btn" id="startBtn">🚀 Mula Kuiz</button>
+      </div>
+      <div class="question-screen" id="questionScreen">
+        <div class="question-type-badge" id="questionType"></div>
+        <div class="question-counter" id="questionCounter"></div>
+        <div class="question" id="questionText"></div>
+        <div id="questionContainer"></div>
+        <button class="btn" id="nextBtn" disabled>Semak Jawapan</button>
+      </div>
+      <div class="result-screen" id="resultScreen">
+        <h2>🎉 Tahniah, <span id="displayUserName"></span>! Kuiz Selesai!</h2>
+        <div class="score" id="finalScore"></div>
+        <div class="feedback" id="feedbackMessage"></div>
+        <div class="stats">
+          <div class="stat-card"><div class="stat-number" id="correctAnswers"></div><div>Betul</div></div>
+          <div class="stat-card"><div class="stat-number" id="wrongAnswers"></div><div>Salah</div></div>
+          <div class="stat-card"><div class="stat-number" id="percentage"></div><div>Peratusan</div></div>
+        </div>
+        <button class="btn" id="restartBtn">🔄 Main Lagi</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        type: 'multiple-choice',
+        question: "Apakah maksud waadat?",
+        options: [
+          "Perjanjian antara raja dengan penjajah",
+          "Undang-undang kerajaan",
+          "Janji setia antara raja dan rakyat",
+          "Sumpah taat setia tentera"
+        ],
+        correct: 2,
+        explanation: "Waadat ialah janji setia antara raja dan rakyat."
+      },
+      {
+        type: 'true-false',
+        question: "Pulau Pinang adalah salah satu negeri yang mempunyai sultan.",
+        correct: false,
+        explanation: "Pulau Pinang tiada sultan, diketuai Yang di-Pertua Negeri."
+      },
+      {
+        type: 'matching',
+        question: "Padankan negeri dengan gelaran ketua negeri:",
+        leftItems: ["Perlis", "Johor", "Negeri Sembilan"],
+        rightItems: ["Yang di-Pertuan Besar", "Sultan", "Raja"],
+        correctMatches: [2,1,0],
+        explanation: "Contoh padanan: Perlis – Raja, Johor – Sultan, Negeri Sembilan – Yang di-Pertuan Besar."
+      },
+      {
+        type: 'fill-blank',
+        question: "Lengkapkan ayat: Sistem pemerintahan selepas merdeka dikenali sebagai _____ dan kuasa raja ditentukan oleh _____.",
+        text: "Sistem pemerintahan selepas merdeka dikenali sebagai _____ dan kuasa raja ditentukan oleh _____.",
+        blanks: ["Raja Berperlembagaan", "Perlembagaan Negeri"],
+        wordBank: ["Raja Mutlak", "Perlembagaan Negeri", "Raja Berperlembagaan", "Undang-Undang Tubuh", "Demokrasi Berparlimen"],
+        explanation: "Sistem selepas merdeka adalah Raja Berperlembagaan dan kuasa ditentukan oleh Perlembagaan Negeri."
+      },
+      {
+        type: 'drag-drop',
+        question: "Susun zaman mengikut kronologi perubahan institusi raja:",
+        dragItems: ["Zaman Jepun", "Zaman British", "Zaman Melayu Awal", "Selepas Merdeka"],
+        dropZones: ["1", "2", "3", "4"],
+        correctOrder: [2,1,0,3],
+        explanation: "Urutan: Zaman Melayu Awal → British → Jepun → Selepas Merdeka."
+      },
+      {
+        type: 'multiple-choice',
+        question: "Apakah maksud daulat?",
+        options: ["Tindakan rakyat melanggar undang-undang", "Kuasa tertinggi raja", "Perjanjian antara negeri", "Sistem pemerintahan Islam"],
+        correct: 1,
+        explanation: "Daulat bermaksud kuasa tertinggi raja."
+      },
+      {
+        type: 'true-false',
+        question: "Waadat merupakan konsep yang menunjukkan hubungan antara penjajah dan rakyat.",
+        correct: false,
+        explanation: "Waadat adalah janji antara raja dan rakyat, bukan penjajah."
+      },
+      {
+        type: 'matching',
+        question: "Padankan zaman dengan ciri pemerintahan:",
+        leftItems: ["Zaman Melayu Awal", "Zaman British", "Zaman Jepun"],
+        rightItems: ["Pentadbiran dikawal Gabenor Jepun", "Raja berkuasa mutlak", "Raja tiada kuasa mutlak"],
+        correctMatches: [1,2,0],
+        explanation: "Zaman Melayu Awal: Raja berkuasa mutlak; British: tiada kuasa mutlak; Jepun: dikawal Gabenor Jepun."
+      },
+      {
+        type: 'fill-blank',
+        question: "Lengkapkan: Kata asal \"daulat\" berasal daripada bahasa _____ yang bermaksud _____.",
+        text: "Kata asal \"daulat\" berasal daripada bahasa _____ yang bermaksud _____.",
+        blanks: ["Arab", "negeri"],
+        wordBank: ["Jepun", "negeri", "kuasa", "Arab", "daerah"],
+        explanation: "Daulat berasal dari bahasa Arab yang bermaksud negeri."
+      },
+      {
+        type: 'drag-drop',
+        question: "Kelaskan negeri-negeri berikut:",
+        dragItems: ["Selangor", "Sabah", "Johor", "Melaka"],
+        dropZones: ["Ada Raja", "Tiada Raja"],
+        correctAssignment: [0,1,0,1],
+        explanation: "Selangor & Johor ada raja; Sabah & Melaka tiada raja."
+      },
+      {
+        type: 'multiple-choice',
+        question: "Negara manakah yang masih mengamalkan sistem beraja?",
+        options: ["Indonesia", "Thailand", "Singapura", "Filipina"],
+        correct: 1,
+        explanation: "Thailand masih mengamalkan pemerintahan beraja."
+      },
+      {
+        type: 'true-false',
+        question: "Malaysia mempunyai 9 negeri yang masih mengekalkan sistem beraja.",
+        correct: true,
+        explanation: "Terdapat 9 negeri yang masih ada raja atau sultan di Malaysia."
+      }
+    ];
+  </script>
+  <script src="https://cdn.jsdelivr.net/gh/cikgumie/interactive_quiz@refs/heads/main/script.js"></script>
+</body>
+</html>
